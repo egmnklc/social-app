@@ -42,3 +42,9 @@ dotnet watch --no-hot-reload
 
 > The API creation is similar to the Spring framework.
 > : ![Alt text](image-2.png)
+
+> API depends on Application which depends on Domain.
+> - We have a Persistence (read/write/delete) records to disk or database, which has a dependency from the application and to the domain.
+
+## Benefit Of Using SQLite For Development
+> It makes the code portable. We can save our database into the source control
