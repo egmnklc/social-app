@@ -12,9 +12,20 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<DataContext>(opt =>{
+builder.Services.AddDbContext<DataContext>(opt =>
+{
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+// Adding cors policy 
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy("CorsPolicy", policy =>
+    {
+        policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:3000");
+    }
+    );
+});
+
 
 var app = builder.Build();
 
@@ -26,7 +37,7 @@ var app = builder.Build();
 * At each stage of its journey through that pipeline on its way in and on its way out, then we can do 
 * things with that request.
 *
-*/  
+*/
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -35,6 +46,9 @@ if (app.Environment.IsDevelopment())
 
 // Removed this to keep things simple for now 
 // app.UseHttpsRedirection();
+
+// Addig CORS before getting to Authorization, 
+app.UseCors("CorsPolicy");
 
 app.UseAuthorization();
 
