@@ -7,6 +7,19 @@ Updated at: Thursday 08-10-2023 | 09:46:24
 > ___`Guid:`___ Stands for globally unique identifier. It's a 128 bit integer that's used to uniquely identify something. 
 > : It's used as a primary key in a DB
 
+# CQRS - Command Query Responsibility Segregation | Command & Query Seperation
+> CQRS is the pattern and architecture we're using to create our CRUD operations.
+> : CQRS is concerned with the flow of data.
+
+| Command | Query   |
+|-------------- | -------------- |
+| Does something| Answers a question|
+| Modifies state| Does not modify state|
+| Should not return a value| Should return value|
+
+![Alt text](image-3.png)
+![Alt text](image-4.png)
+
 
 # The Backbone Of DOTNET Apps
 ## Entities
@@ -72,3 +85,29 @@ dotnet watch --no-hot-reload
 ## About HTTP 204
 > If you run get query on an element that is deleted and there's no error handling in the get API in case the content does not exists, Postman will return HTTP 204 - NO CONTENT code.
 
+## Cancellation Notses - What Are They?
+> Say the highlighted request here takes 30 seconds to process.
+> ![Alt text](image-7.png)
+>
+> Without utilising CancellationTokens the requests will keep on going on the server side regardless of user's action.
+
+## Clean Architecture Pattern
+> Allows easily mapping of different layers, by Uncle Bob 2012.
+> ![Alt text](image-8.png)
+>
+> Set of recommendations about how you can build an Application.
+
+## CQRS + Mediator pattern
+> ___`CQRS:`___ Stands for Command and Query Responsibility Segregation
+>
+> CQRS is generally mentioned with `Event Sourcing`.
+> - Event sourcing is quite complex but an excellent tool. 
+> -
+
+
+## Mediator Pattern
+> Mediator specifically relates to how we're using the flow of control in our application.
+> - Our API Controllers send an Object to our Mediator, 
+> - Mediator has a Handler that has a handler that's going to process our business logic and then
+> it's going to send object back out to our API Controller, which in turn will return the object
+> to the client inside an HTTP Response.

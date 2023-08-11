@@ -3,8 +3,6 @@ using Application.Core;
 using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Persistence;
 
 namespace API.Controllers
 {
@@ -22,7 +20,7 @@ namespace API.Controllers
         public async Task<ActionResult<List<Activity>>> GetActivities()
         {
             // We used Send because we need to Send this query to our Mediator Handler
-            return await Mediator.Send(new Application.List.Query());
+            return await Mediator.Send(new List.Query());
         }
 
         // When we make this request, it's going to go to the api/activities/id and use the id here.
