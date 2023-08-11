@@ -63,3 +63,12 @@ dotnet watch --no-hot-reload
 > ```dotnet 
 > dotnet restore
 > ```
+
+> There's a easier way to set properties of request items. An extension called AutoMapper Dependeny Injection from NuGet gallery will be used.
+> ![Alt text](image-6.png)
+
+> AcitiviesController is simply where we store our API methods.
+
+## About HTTP 204
+> If you run get query on an element that is deleted and there's no error handling in the get API in case the content does not exists, Postman will return HTTP 204 - NO CONTENT code.
+

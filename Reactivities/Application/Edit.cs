@@ -1,3 +1,4 @@
+using AutoMapper;
 using Domain;
 using MediatR;
 using Persistence;
@@ -14,9 +15,11 @@ namespace Application
             public class Handler : IRequestHandler<Command>
             {
                 private readonly DataContext _context;
+                private readonly IMapper _mapper;
 
-                public Handler(DataContext context)
+                public Handler(DataContext context, IMapper mapper)
                 {
+                    _mapper = mapper;
                     _context = context;
 
                 }
@@ -32,10 +35,12 @@ namespace Application
                     * 
                     */
                     //? ?? operator is known as the null coalescing operator. 
-                    
-                    
-                    //? We can to this for every single property but there's a shorter way to do so.      
-                    activity.Title = request.Activity.Title ?? activity.Title;
+                    // Take LHS properties and reflect them to the RHS (it is in the database)
+                    _mapper.Map(request.Activity, activity);
+
+                    //? We can to this for every single property but there's a shorter way to do so.
+                    // Commented this line because we'll be using Automapper
+                    // activity.Title = request.Activity.Title ?? activity.Title;
 
                     await _context.SaveChangesAsync();
 
