@@ -48,3 +48,18 @@ dotnet watch --no-hot-reload
 
 ## Benefit Of Using SQLite For Development
 > It makes the code portable. We can save our database into the source control
+
+> The business logic will go into the Application layer.
+
+## Some Notes About The Mediator Pattern
+> Mediator pattern desing allows only one-way data flow. 
+> : The communication is one way between the API and the Application layer.
+>
+> To handle dependencies, we install Mediatr extension from NuGet gallery.
+> : ![Alt text](image-5.png)
+
+
+> The dotnet restore is handy when you're not getting an access to a particular class/interface you think you should have access to.
+> ```dotnet 
+> dotnet restore
+> ```
