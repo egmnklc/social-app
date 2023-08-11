@@ -51,5 +51,13 @@ namespace API.Controllers
         {
             return Ok(await Mediator.Send(new Create.Command { Activity = activity }));
         }
+
+        //* PUT is used for updating resources.
+        [HttpPut("{id}")]
+        public async Task<IActionResult> EditActivity(Guid id, Activity activity){
+            //* We'll add the id to the Activity object before we pass it to our handler.
+            activity.Id = id;
+            return Ok(await Mediator.Send(new Edit.Command{Activity=activity}));
+        }        
     }
 }
