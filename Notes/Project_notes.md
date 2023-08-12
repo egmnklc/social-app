@@ -111,3 +111,36 @@ dotnet watch --no-hot-reload
 > - Mediator has a Handler that has a handler that's going to process our business logic and then
 > it's going to send object back out to our API Controller, which in turn will return the object
 > to the client inside an HTTP Response.
+
+---
+# React | Frontend Notes
+> Folder Structure consists of 2 main folders:
+> 1. ___`app folder:`___ Will have cross-cutting concerns,
+> 2. ___`features folder:`___ Will contain all our our individual features that we build in this application
+
+> For the sake of using standard conventions, we name our interfaces beginning with a capital I `I`.
+
+### Remember that we need something (such as the div we use inside our return statements) while returning jsx, why we need it?
+> If we don't have anything, then we're not allowed to return different elements inside a React Component, we can only return a single element but it can have as many children as it likes. 
+> - To overcome this issue, we're using the extra div container. Preferably a Fragment could be used. An empty tag will do the job as well since its basically the shortcut of using a Fragment.
+```Typescript
+<>
+  <Navbar />
+  <Container style={{marginTop: '7em'}}>
+    <List>
+      {activities.map((activity) => (
+        <List.Item key={activity.id}>{activity.title}</List.Item>
+      ))}
+    </List>
+  </Container>
+</>
+```
+>
+> ___`Note:`___ On the inspection tool, if you use an empty div then there will be a div elemen with no attributes inside displayed as the parent of all children. If you replace that with a Fragment, the div will have class="root".
+> 
+> ![Alt text](image-9.png) 
+
+
+
+
+---
