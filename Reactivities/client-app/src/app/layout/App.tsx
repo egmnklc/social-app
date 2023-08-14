@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Container } from "semantic-ui-react";
 import { Activity } from "../models/activity";
 import Navbar from "./Navbar";
 import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard";
-import {v4 as uuid} from 'uuid';
+import { v4 as uuid } from "uuid";
+import agent from "../api/agent";
 
 function App() {
   //* activities will be a set of elements of Activity type.
@@ -21,11 +21,13 @@ function App() {
    * useEffect() runs for each render and the use of setActivities will trigger a render.
    */
   useEffect(() => {
-    axios
-      .get<Activity[]>("http://localhost:5000/api/activities")
+    agent.Activities.list()
       .then((response) => {
-        // console.log(response);
-        setActivities(response.data);
+        console.log('API response:', response);
+        response.forEach(activity => {
+          activity.date = activity.date.split('T')[0]
+        })
+        setActivities(response);
       });
   }, []);
 
@@ -63,13 +65,13 @@ function App() {
           ...activities.filter((x) => x.id !== activity.id),
           activity,
         ])
-      : setActivities([...activities, {...activity, id: uuid()}]);
+      : setActivities([...activities, { ...activity, id: uuid() }]);
     setEditMode(false);
     setSelectedActivity(activity);
   }
 
-  function handleDeleteActivity(id: string){
-    setActivities([...activities.filter(x => x.id !== id)])
+  function handleDeleteActivity(id: string) {
+    setActivities([...activities.filter((x) => x.id !== id)]);
   }
 
   return (

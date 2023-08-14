@@ -9,7 +9,12 @@ interface Props {
 }
 
 //* Divided puts a horizontal line between elements.
-export default function ActivityList({ activities, selectActivity, deleteActivity }: Props) {
+export default function ActivityList({
+  activities,
+  selectActivity,
+  deleteActivity,
+}: Props) {
+  // console.log('Activities:', activities);
   return (
     <Segment>
       <Item.Group divided>
@@ -17,9 +22,7 @@ export default function ActivityList({ activities, selectActivity, deleteActivit
           <Item key={activity.id}>
             <Item.Content>
               <Item.Header as="a">{activity.title}</Item.Header>
-              <Item.Meta>
-                {new Date(activity.date).toLocaleDateString()}
-              </Item.Meta>
+              <Item.Meta>{activity.date}</Item.Meta>
               <Item.Description>
                 <div>{activity.description}</div>
                 <div>
@@ -27,8 +30,18 @@ export default function ActivityList({ activities, selectActivity, deleteActivit
                 </div>
               </Item.Description>
               <Item.Extra>
-                <Button onClick={() => selectActivity(activity.id)} floated="right" content="View" color="blue" />
-                <Button onClick={() => deleteActivity(activity.id)} floated="right" content="Delete" color="red" />
+                <Button
+                  onClick={() => selectActivity(activity.id)}
+                  floated="right"
+                  content="View"
+                  color="blue"
+                />
+                <Button
+                  onClick={() => deleteActivity(activity.id)}
+                  floated="right"
+                  content="Delete"
+                  color="red"
+                />
                 <Label basic content={activity.category} />
               </Item.Extra>
             </Item.Content>
