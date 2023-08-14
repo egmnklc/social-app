@@ -4,9 +4,12 @@ import { Button, Item, Label, Segment } from "semantic-ui-react";
 
 interface Props {
   activities: Activity[];
+  selectActivity: (id: string) => void;
+  deleteActivity: (id: string) => void;
 }
+
 //* Divided puts a horizontal line between elements.
-export default function ActivityList({ activities }: Props) {
+export default function ActivityList({ activities, selectActivity, deleteActivity }: Props) {
   return (
     <Segment>
       <Item.Group divided>
@@ -15,7 +18,6 @@ export default function ActivityList({ activities }: Props) {
             <Item.Content>
               <Item.Header as="a">{activity.title}</Item.Header>
               <Item.Meta>
-                {" "}
                 {new Date(activity.date).toLocaleDateString()}
               </Item.Meta>
               <Item.Description>
@@ -25,7 +27,8 @@ export default function ActivityList({ activities }: Props) {
                 </div>
               </Item.Description>
               <Item.Extra>
-                <Button floated="right" content="View" color="blue" />
+                <Button onClick={() => selectActivity(activity.id)} floated="right" content="View" color="blue" />
+                <Button onClick={() => deleteActivity(activity.id)} floated="right" content="Delete" color="red" />
                 <Label basic content={activity.category} />
               </Item.Extra>
             </Item.Content>
