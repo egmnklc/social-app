@@ -5,6 +5,7 @@ import Navbar from "./Navbar";
 import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard";
 import { v4 as uuid } from "uuid";
 import agent from "../api/agent";
+import LoadingComponents from "./LoadingComponent";
 
 function App() {
   //* activities will be a set of elements of Activity type.
@@ -14,6 +15,8 @@ function App() {
     Activity | undefined
   >(undefined);
   const [editMode, setEditMode] = useState(false);
+  //* State for loading
+  const [loading, setLoading] = useState(true);
 
   /*
    *  The [] (this is an empty dependency array) passed here will make useEffect to fire only once.
@@ -23,11 +26,13 @@ function App() {
   useEffect(() => {
     agent.Activities.list()
       .then((response) => {
-        console.log('API response:', response);
+        // console.log('API response:', response);
         response.forEach(activity => {
           activity.date = activity.date.split('T')[0]
         })
+        
         setActivities(response);
+        setLoading(false);
       });
   }, []);
 
@@ -73,6 +78,10 @@ function App() {
   function handleDeleteActivity(id: string) {
     setActivities([...activities.filter((x) => x.id !== id)]);
   }
+
+  if (loading) return <LoadingComponents content='Loading App' />
+
+
 
   return (
     <>
