@@ -1,4 +1,4 @@
-import React from "react";
+import React, { SyntheticEvent, useState } from "react";
 import { Activity } from "../../../app/models/activity";
 import { Button, Item, Label, Segment } from "semantic-ui-react";
 
@@ -6,6 +6,7 @@ interface Props {
   activities: Activity[];
   selectActivity: (id: string) => void;
   deleteActivity: (id: string) => void;
+  submitting: boolean;
 }
 
 //* Divided puts a horizontal line between elements.
@@ -13,7 +14,17 @@ export default function ActivityList({
   activities,
   selectActivity,
   deleteActivity,
+  submitting,
 }: Props) {
+  const [target, setTarget] = useState("");
+  //* Click events come from something called SyntheticEvent in React.
+  function handleActivityDelete(
+    event: SyntheticEvent<HTMLButtonElement>,
+    id: string
+  ) {
+    setTarget(event.currentTarget.name);
+    deleteActivity(id);
+  }
   // console.log('Activities:', activities);
   return (
     <Segment>
@@ -37,7 +48,9 @@ export default function ActivityList({
                   color="blue"
                 />
                 <Button
-                  onClick={() => deleteActivity(activity.id)}
+                  name={activity.id}
+                  loading={submitting && target === activity.id}
+                  onClick={(event) => handleActivityDelete(event, activity.id)}
                   floated="right"
                   content="Delete"
                   color="red"
