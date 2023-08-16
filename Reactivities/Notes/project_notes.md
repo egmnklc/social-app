@@ -679,9 +679,11 @@ dotnet watch --no-hot-reload
 ---
 # MobX
 ## Why use MobX?
-> Written in TypeScript and easily intergrible to an application written with TypeScript.
+> MobX is the state management system we're going to use. Written in TypeScript and easily intergrible to an application written with TypeScript.
 >
 > Incredibly easy to work with.
+>
+> MobX makes it impossible to produce an inconsistent state. Compared to Redux, MobX creates mutable states that we can mutate directly. It does not use immutable structures so we can mutate our states.
 
 ## MobX Core Functions
 > MobX uses `Observables` 
@@ -711,4 +713,46 @@ dotnet watch --no-hot-reload
 
 ## Make Auto Observable
 > ![Alt text](image-8.png)
+> We're using arrow functions inside here because arrow functions automatically bind to a class in JavaScript, whereas normal functions do not and you need to take an action on a function or you need to to something extra with a function in order to bind it to a class.
+
+## MobX Reaction
+> ![Alt text](image-9.png)
+> We can react to observable state changing automatically inside our classes. Here, the reaction takes two parameters, a function/expression to idenify what state we want to observe, and then we can do something with that state. Here it logs the name to the console every time the first name is updated.
+
+### Reaction Context
+> Normally in React we're passing down information from a parent component to child component and it is the only way to get access to a property with higher-hierarchy from a lower-hierarchy component.
+> ![Alt text](image-11.png)
+>
+> With `React Context`, each component is going to be able to directly access the MobX store directly, without need of a middleman to pass down props to. We're simply going to have a component that's going to be able to access the store directly to render a view in user interface.
+
+## React Context 
+> ![Alt text](image-10.png)
+> When we use React context, we've got a hook available that we can make use of. In our MobX classes we create a Context, and then to consume the context we can use the `useContext()` method.
+
+## MobX React Lite
+> We want our components to have the power to Observe Observables inside our Mob stores. To help us with that, we'll use MobX React Lite.
+> ![Alt text](image-12.png)
+>
+> - The `observer` imported from `mobx-react-lite` is a higher order function. A higher order function takes another function as a parameter. It returns a function with extra powers. It has the power to Observe Observables from the MobX store.
+
+> Note that MobX is also written in TypeScript so we can guarantee that we have a TypeScript definition file that comes along.
+
+> All local states in the app will be moved into a centralized state store.
+
+## MobX Notes
+> If using async/await + runInAction, we can leverage runInAction.
+> : Not using runInAction will cause this error: 
+> 
+> ![Alt text](image-13.png)
+>
+> The MobX strict mode enforces that any modification to the state must happen inside of an action.
+> : So basically `runInAction` takes a piece of code and executes it inside of an anonymous function instead of having to manually create an action for it.
+
+## The Map Object
+> https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
+>
+> The `Map` object holds key-value pairs and remembers the original insertion order of the keys. Any value (both objects and primitive values) may be used as either a key or a value.
+> : It allows for direct key, and if existent, value pair operations effectively.
+>
+> Used in the project for cleaner code.
 ---

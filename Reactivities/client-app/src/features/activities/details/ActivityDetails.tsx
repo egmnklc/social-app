@@ -1,15 +1,19 @@
 import { Button, Card, Image } from "semantic-ui-react";
-import { Activity } from "../../../app/models/activity";
+import { useStore } from "../../../app/stores/store";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 
-interface Props {
-  activity: Activity;
-  cancelSelectedActivity: () => void;
-  openForm: (id: string) => void;
-}
+export default function ActivityDetails() {
+  const { activityStore } = useStore();
+  const {
+    selectedActivity: activity,
+    openForm,
+    cancelSelectedActivity,
+  } = activityStore;
 
-export default function ActivityDetails({ activity, cancelSelectedActivity, openForm}: Props) {
+  if (!activity) return <LoadingComponent />;
+
   return (
-    // Fluid makes a component take as much as space there's available.
+    //* Fluid makes a component take as much as space there's available.
     <Card fluid>
       <Image src={`/assets/categoryImages/${activity.category}.jpg`} />
       <Card.Content>
@@ -20,12 +24,22 @@ export default function ActivityDetails({ activity, cancelSelectedActivity, open
         <Card.Description>{activity.description}</Card.Description>
       </Card.Content>
       <Card.Content extra>
-        <Button.Group widths='2'>
-          <Button onClick={() => openForm(activity.id)} basic color='blue' content='Edit'/>
+        <Button.Group widths="2">
+          <Button
+            onClick={() => openForm(activity.id)}
+            basic
+            color="blue"
+            content="Edit"
+          />
           {/* We don't need to declare an anonymous function here because our we're not
           using paranthesis here, this doesn't execute immidiately and will wait for the 
           button click to be executed. */}
-          <Button onClick={cancelSelectedActivity} basic color='blue' content='Cancel'/>
+          <Button
+            onClick={cancelSelectedActivity}
+            basic
+            color="blue"
+            content="Cancel"
+          />
         </Button.Group>
       </Card.Content>
     </Card>

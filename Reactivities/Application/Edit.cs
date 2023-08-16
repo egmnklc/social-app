@@ -21,13 +21,10 @@ namespace Application
                 {
                     _mapper = mapper;
                     _context = context;
-
                 }
-
                 public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
                 {
                     var activity = await _context.Activities.FindAsync(request.Activity.Id);
-
                     /*
                     *   The user may or may not have updated th activity title and they may or may not be
                     * sending up this particular property with the request. For example they may simply edit 
@@ -37,15 +34,11 @@ namespace Application
                     //? ?? operator is known as the null coalescing operator. 
                     // Take LHS properties and reflect them to the RHS (it is in the database)
                     _mapper.Map(request.Activity, activity);
-
                     //? We can to this for every single property but there's a shorter way to do so.
                     // Commented this line because we'll be using Automapper
                     // activity.Title = request.Activity.Title ?? activity.Title;
-
                     await _context.SaveChangesAsync();
-
                     return Unit.Value;
-
                 }
             }
         }
