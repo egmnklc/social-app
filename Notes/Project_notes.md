@@ -141,6 +141,12 @@ dotnet watch --no-hot-reload
 > ![Alt text](image-9.png) 
 
 
+## Startup Class Housekeeping
+### Extension Method
+> An extension is a method that we use that extends a class in some way. We'll extends the servivces in Program.cs. 
+> : Our motivation is to keep our code as clean as possible. They will be located in a folder under API folder named Extensions.
 
 
+
+ 
 ---
