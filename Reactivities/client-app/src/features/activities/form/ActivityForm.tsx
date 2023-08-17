@@ -104,15 +104,13 @@ export default observer(function ActivityForm() {
           onChange={handleInputChange}
         />
         <Button
-          as={Link}
-          to="/activities"
           loading={loading}
           floated="right"
           positive
           type="submit"
           content="Submit"
         />
-        <Button floated="right" type="submit" content="Cancel" />
+        <Button as={Link} to={'/activities'} floated="right" type="submit" content="Cancel" />
       </Form>
     </Segment>
   );
