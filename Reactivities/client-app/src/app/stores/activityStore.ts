@@ -12,7 +12,8 @@ export default class ActivityStore {
   editMode = false;
   loading = false;
   //* Are we loading our components for the first time?, same as state for loading: const [loading, setLoading] = useState(true);
-  loadingInitial = true;
+  //* Used to distinguish the 'initial loading state' from other loading states(like updating or deleting)
+  loadingInitial = false;
 
   constructor() {
     /*
@@ -34,17 +35,14 @@ export default class ActivityStore {
     );
   }
 
-
-
   loadActivities = async () => {
+    this.loadingInitial = true;
     try {
       //* Get activities from the API, loop over each, split date and mutate the state with MobX. It would have been an AntiPattern in Redux.
       const activities = await agent.Activities.list();
-
       runInAction(() => {
         activities.forEach((activity) => {
-          activity.date = activity.date.split("T")[0];
-          this.activityRegistry.set(activity.id, activity);
+          this.setActivity(activity);
         });
         this.loadingInitial = false;
       });
@@ -56,6 +54,37 @@ export default class ActivityStore {
     }
   };
 
+  private setActivity = (activity: Activity) => {
+    activity.date = activity.date.split("T")[0];
+    this.activityRegistry.set(activity.id, activity);
+  };
+
+  loadActivity = async (id: string) => {
+    let activity = this.getActivity(id);
+    if (activity) {
+      this.selectedActivity = activity;
+      return activity;
+    } else {
+      this.loadingInitial = true;
+      try {
+        activity = await agent.Activities.details(id);
+        runInAction(() => {
+          this.selectedActivity = activity;
+        });
+        this.setActivity(activity);
+        this.loadingInitial = false;
+        return activity;
+      } catch (error) {
+        console.log(error);
+        this.loadingInitial = false;
+      }
+    }
+  };
+
+  private getActivity = (id: string) => {
+    return this.activityRegistry.get(id);
+  };
+
   /* We're using this keyword here so we got to bin the particular property to our class (.bound does that)
    * - When a function is bound to a class, it means that we can make use of `this` keyword to acces a property
    * inside the same class.
@@ -65,24 +94,6 @@ export default class ActivityStore {
   // setTitle = () => {
   //   this.title = this.title + "!";
   // };
-
-  //* Moved selectedActivity from App.tsx to here.
-  selectActivity = (id: string) => {
-    this.selectedActivity = this.activityRegistry.get(id);
-  };
-
-  cancelSelectedActivity = () => {
-    this.selectedActivity = undefined;
-  };
-
-  openForm = (id?: string) => {
-    id ? this.selectActivity(id) : this.cancelSelectedActivity();
-    this.editMode = true;
-  };
-
-  closeForm = () => {
-    this.editMode = false;
-  };
 
   createActivity = async (activity: Activity) => {
     this.loading = true;

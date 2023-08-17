@@ -452,7 +452,7 @@ $$ \huge \text {A sample table for SELF JOIN} $$
 > If we want to give a component some state, then there's a hook we could use called `useState()`.
 
 ## useEffect()
-> `useEffect()` allows us to hook into lifecycle events inside our component.
+> `useEffect()` allows us to hook into lifecycle events inside our component. useEffet re-runs only if a change in its dependencies occur between renders.
 > - So when our component mounts or is initialized on our page, then we can use useEffect() to add a side effect to our function so that something happens when our component mounts.
 > : ___Component Mounting:___ It means that the component is being rendered into the HTML and is becoming a part of the webpage.
 
@@ -676,6 +676,10 @@ dotnet watch --no-hot-reload
 > ___`Note:`___ On the inspection tool, if you use an empty div then there will be a div elemen with no attributes inside displayed as the parent of all children. If you replace that with a Fragment, the div will have class="root".
 > 
 > ![Alt text](image-9.png) 
+>
+> Say you have the same component but for different actions. Such as a form with same input values used both to edit and create an activity. In routes, they pointed to the same component and a component change was not happening, so the context was not re-rendering itself, because the form component is the same. To overcome this, we used the key value for the component to reset component state.
+> 
+> ![Alt text](image-14.png)
 ---
 # MobX
 ## Why use MobX?
@@ -747,6 +751,14 @@ dotnet watch --no-hot-reload
 >
 > The MobX strict mode enforces that any modification to the state must happen inside of an action.
 > : So basically `runInAction` takes a piece of code and executes it inside of an anonymous function instead of having to manually create an action for it.
+>
+> With MobX, now our app has state management, cleaned up our back-end code for UI.
+>
+> Now, we're providing the stores via the React Context. Any component in our application can gain access to our store directly, it means we no longer need to treat components as middlemen for states or props that we're passing down to components.
+>
+> - Why not use Redux, it's more popular?
+> : It was created before MobX. MobX is written in and uses TypeScript and easy to use with. In some cases MobX is faster than Redux as well, which is an author claim. 
+
 
 ## The Map Object
 > https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
@@ -755,4 +767,22 @@ dotnet watch --no-hot-reload
 > : It allows for direct key, and if existent, value pair operations effectively.
 >
 > Used in the project for cleaner code.
+
+## Routing
+> 1. Why do we need a router?
+> - SPAs (Single Page Applications) need routers, simply because we don't transition between pages but components. We only have index.html now. As apps get more complex, a need for routing emerges. To handle that, React-router is a fit choice.
+> 2. React-router
+> 3. React Router APIs
+> - APIs are made extremely simple. We start off with a 
+`BrowserRouter` and surround our app with it. Inside the app, we use `Route components` which get replaced with the components that we want to load when a particular route is navigated to. `Link` (adding a link to a button), `NavLink`(makes a button active when a link is clicked on) and `Redirect` (redirecting the user) take place of tags in our app as well.
+>   - NavLink puts additional styling to the component it's used on and is pereferable in NavBars as it adds a highligting. Link on the other hand simply allows navigation between components with no additional styling. 
+### React Router Hooks
+> Allows hooking into the router state to get various pieces of information.
+> - ___useHistory___ Keeps track of users current location or browser's location  
+> - ___useLocation___ Where user is currently at
+> - ___useParams___ If there are route parameters, say have an activity we want to fetch with the ID of the activity from the route, we use params.
+> - ___useRouteMatch___
+>
+> 4. History Object
+> - Keeps track of the current location and whenever we move location, we push a new route into the `History Object`. Whilst we're inside the context of our React app and inside the Browser Router, then our components are going to rerender when there's a change detected and the component we're looking at will be replaced by another component.
 ---

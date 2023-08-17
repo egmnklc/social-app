@@ -2,12 +2,13 @@ import { SyntheticEvent, useState } from "react";
 import { Button, Item, Label, Segment } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
+import { Link, NavLink } from "react-router-dom";
 
 //* Divided puts a horizontal line between elements.
 //* We want to observe the loading indicator from our store, so we make this function an Observer.
 export default observer(function ActivityList() {
   const { activityStore } = useStore();
-  const {activitiesByDate, deleteActivity, loading} = activityStore;
+  const { activitiesByDate, deleteActivity, loading } = activityStore;
   const [target, setTarget] = useState("");
 
   //* Click events come from something called SyntheticEvent in React.
@@ -18,7 +19,6 @@ export default observer(function ActivityList() {
     setTarget(event.currentTarget.name);
     deleteActivity(id);
   }
-
 
   return (
     <Segment>
@@ -35,12 +35,7 @@ export default observer(function ActivityList() {
                 </div>
               </Item.Description>
               <Item.Extra>
-                <Button
-                  onClick={() => activityStore.selectActivity(activity.id)}
-                  floated="right"
-                  content="View"
-                  color="blue"
-                />
+                <Button as={Link} to={`/activities/${activity.id}`}  floated="right" content="View" color="blue" />
                 <Button
                   name={activity.id}
                   loading={loading && target === activity.id}

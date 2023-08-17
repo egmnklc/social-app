@@ -1,9 +1,9 @@
 import { Grid } from "semantic-ui-react";
 import ActivityList from "./ActivityList";
-import ActivityDetails from "../details/ActivityDetails";
-import ActivityForm from "../form/ActivityForm";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
+import { useEffect } from "react";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 
 //*  In the parameter, what we're doing is we're destructuring the activities property itself from the
 //* props itself or from the properties that we're passing down from our Activity Dashboard.
@@ -13,7 +13,21 @@ import { observer } from "mobx-react-lite";
 
 export default observer(function ActivityDashboard() {
   const { activityStore } = useStore();
-  const { selectedActivity, editMode } = activityStore;
+  const {loadActivities, activityRegistry} = activityStore;
+
+  /*
+   *  The [] (this is an empty dependency array) passed here will make useEffect to fire only once.
+   * Otherwise the useEffect will update acitivites because
+   * useEffect() runs for each render and the use of setActivities will trigger a render.
+   *
+   * Rerun the useEffect only if a change occurs in the activityStore.
+   */
+  useEffect(() => {
+    if (activityRegistry.size <= 1) loadActivities();
+  }, [loadActivities, activityRegistry]);
+
+  if (activityStore.loadingInitial)
+    return <LoadingComponent content="Loading App" />;
 
   return (
     <Grid>
@@ -21,12 +35,7 @@ export default observer(function ActivityDashboard() {
         <ActivityList />
       </Grid.Column>
       <Grid.Column width="6">
-        {/* Display the activity[0] only if there is an activity[0]
-        If you get a TypeError saying Cannot read property of undefined, 
-        it may be because of our component being loaded before getting
-        an access to the activity object.*/}
-        {selectedActivity && !editMode && <ActivityDetails />}
-        {editMode && <ActivityForm />}
+        <h2>Activity Filters</h2>
       </Grid.Column>
     </Grid>
   );

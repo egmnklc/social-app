@@ -1,34 +1,28 @@
-import { useEffect } from "react";
 import { Container } from "semantic-ui-react";
 import Navbar from "./Navbar";
-import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard";
-import LoadingComponents from "./LoadingComponent";
-import { useStore } from "../stores/store";
 import { observer } from "mobx-react-lite";
+import { Outlet, useLocation } from "react-router-dom";
+import HomePage from "../../features/home/HomePage";
 
 function App() {
-  const { activityStore } = useStore();
+  const location = useLocation();
 
   /*
-   *  The [] (this is an empty dependency array) passed here will make useEffect to fire only once.
-   * Otherwise the useEffect will update acitivites because
-   * useEffect() runs for each render and the use of setActivities will trigger a render.
-   *
-   * Rerun the useEffect only if a change occurs in the activityStore.
+   * When we go to activities, the outlet will be replaced with the activity dashboard and same for HomePage.
+   * - Outlet replaces itself with the component to be loaded.
    */
-  useEffect(() => {
-    activityStore.loadActivities();
-  }, [activityStore]);
-
-  if (activityStore.loadingInitial)
-    return <LoadingComponents content="Loading App" />;
-
   return (
     <>
-      <Navbar />
-      <Container style={{ marginTop: "7em" }}>
-        <ActivityDashboard />
-      </Container>
+      {location.pathname === "/" ? (
+        <HomePage />
+      ) : (
+        <>
+          <Navbar />
+          <Container style={{ marginTop: "7em" }}>
+            <Outlet />
+          </Container>
+        </>
+      )}
     </>
   );
 }
