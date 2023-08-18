@@ -1,4 +1,7 @@
+using Application;
 using Application.Core;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -60,6 +63,11 @@ namespace API.Extensions
             // Specify maapping profile to get access to the class inside our application core namespace.
             //  - .Assembly locates all of the mapping profiles that we're using inside our project.
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+            services.AddFluentValidationAutoValidation();
+            //  When the app starts, this service will be registers and any validators will be registered inside there
+            // as well, so it's going to automatically validate for us.
+            services.AddValidatorsFromAssemblyContaining<Create>();
+
 
             return services;
 

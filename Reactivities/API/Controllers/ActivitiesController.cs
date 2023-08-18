@@ -17,17 +17,18 @@ namespace API.Controllers
 
         // Returns a list of activities
         [HttpGet] // api/acitivites
-        public async Task<ActionResult<List<Activity>>> GetActivities()
+        public async Task<IActionResult> GetActivities()
         {
             // We used Send because we need to Send this query to our Mediator Handler
-            return await Mediator.Send(new List.Query());
+            return HandleResult(await Mediator.Send(new List.Query()));
         }
 
         // When we make this request, it's going to go to the api/activities/id and use the id here.
         [HttpGet("{id}")]
-        public async Task<ActionResult<Activity>> GetActivity(Guid id)
+        // Set Task type to IActionResult, it allows to return HTTP Responses
+        public async Task<IActionResult> GetActivity(Guid id)
         {
-            return await Mediator.Send(new Details.Query { Id = id });
+            return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
         }
 
         //* Create an activity
@@ -48,20 +49,22 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateActivity(Activity activity)
         {
-            return Ok(await Mediator.Send(new Create.Command { Activity = activity }));
+            return HandleResult(await Mediator.Send(new Create.Command { Activity = activity }));
         }
 
         //* PUT is used for updating resources.
         [HttpPut("{id}")]
-        public async Task<IActionResult> EditActivity(Guid id, Activity activity){
+        public async Task<IActionResult> EditActivity(Guid id, Activity activity)
+        {
             //* We'll add the id to the Activity object before we pass it to our handler.
             activity.Id = id;
-            return Ok(await Mediator.Send(new Edit.Command{Activity=activity}));
+            return HandleResult(await Mediator.Send(new Edit.Command { Activity = activity }));
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteActivity(Guid id){
-            return Ok(await Mediator.Send(new Delete.Command{Id=id}));
-        }        
+        public async Task<IActionResult> DeleteActivity(Guid id)
+        {
+            return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
+        }
     }
 }

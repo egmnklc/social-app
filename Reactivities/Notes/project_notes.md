@@ -785,4 +785,42 @@ dotnet watch --no-hot-reload
 >
 > 4. History Object
 > - Keeps track of the current location and whenever we move location, we push a new route into the `History Object`. Whilst we're inside the context of our React app and inside the Browser Router, then our components are going to rerender when there's a change detected and the component we're looking at will be replaced by another component.
+
+## Error Handling
+> 1. Validation
+> - Protect/validate the data
+> 2. Handling HTTP Error Responses
+> - We may need to send http error codes occasionally
+> 3. Handling Exceptions
+> - Centralize the handling of exceptions and deal with them in a custom middleware
+> 4. Custom Middleware
+>
+> 5. Using Axios Interceptors
+> - Centralize the error handling so we can build it once and forget it
+>
+> ![Alt text](image-15.png)
+
+# A Key Rule of Clean Architecture - The Dependency Rule
+> Goal of this is to encapsulate each ring of the architectural model and these dependencies can only point inwards.
+>
+> - So, our Application does not know about what technology is being used to present that data out to the client in the end.
+
+
+## The Overall Logic Of the App
+> The `Mediator` and our `API Controller` uses mediator handler, now our logic is contained inside the handler.
+> - This is where we're going to be checking for errors. Suppose from our API Controller, we requested an activity with a guid that does not exist in our db. Then, our `Mediator Handler` is going to need to handle this logic and return the appropriate response to our Controller, but this cannot be a HTTP response because it dosn't know what techology its using to pass this object onto.
+>
+> ![Alt text](image-16.png)
+>
+> ![Alt text](image-17.png)
+
+## API Controller On Validation
+> When we make an attribute required on Domain entity, our API Controller is going to generate automatic HTTP 400 response if it encounters a validation error.
+>
+> Bad Request throwing is located in BaseApiController, and we're using that method inside ActivitesController. Basically the error is sent from BaseApiController.
+
+
+> When we're talking about middleware, we're talking about our HTTP Request Pipeline.
+
+
 ---

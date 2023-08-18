@@ -1,4 +1,6 @@
+using Application.Core;
 using Domain;
+using FluentValidation;
 using MediatR;
 using Persistence;
 
@@ -6,13 +8,22 @@ namespace Application
 {
     public class Create
     {
-        public class Command : IRequest
+        public class Command : IRequest<Result<Unit>>
         {
 
             public Activity Activity { get; set; }
         }
 
-        public class Handler : IRequestHandler<Command>
+        public class CommandValidator : AbstractValidator<Command>
+        {
+
+            public CommandValidator()
+            {
+                RuleFor(x => x.Activity).SetValidator(new ActivityValidator());
+            }
+        }
+
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
             public Handler(DataContext context)
@@ -30,16 +41,18 @@ namespace Application
             * so we do need to return, so that the API controller is aware that the action is completed.
             
             */
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 //*  We're not accessing the database at this point. We only add the Activity in memory,
                 //* not touching the database.
                 _context.Activities.Add(request.Activity);
 
-                await _context.SaveChangesAsync();
-
+                //*  SaveChangesAsync() returns the number of entries written to the database. If 0, it's false. If > 0, then it's true,
+                //* which means it has written something to the database.
+                var result = await _context.SaveChangesAsync() > 0;
+                if (!result) return Result<Unit>.Failure("Failed to create activity");
                 //* Letting the API controller that our request has been finished.
-                return Unit.Value;
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

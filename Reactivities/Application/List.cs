@@ -1,3 +1,4 @@
+using Application.Core;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -10,8 +11,8 @@ namespace Application
     public class List
     {
         // Query class will derieve from IRequest, which will return a List of Activities.
-        public class Query : IRequest<List<Activity>> { }
-        public class Handler : IRequestHandler<Query, List<Activity>>
+        public class Query : IRequest<Result<List<Activity>>> { }
+        public class Handler : IRequestHandler<Query, Result<List<Activity>>>
         {
             // This creates a Handle method that returns Task List of Acitivities.
             // - Since we're returning a Task, we need to make it async.
@@ -24,7 +25,7 @@ namespace Application
                 _context = context;
             }
 
-            public async Task<List<Activity>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<Activity>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 // // We'll add some slowness to our request
                 // try
@@ -44,7 +45,7 @@ namespace Application
                 // }
 
                 //* If request makes through, return requested activities as normal. 
-                return await _context.Activities.ToListAsync();
+                return Result<List<Activity>>.Success(await _context.Activities.ToListAsync(cancellationToken));
 
                 //!  NOTE: We need to pass the CancellationToken to Handler in Activities controller and pass it as
                 //! a parameter in HttpGet as CancellactionToken ct and add into return.
