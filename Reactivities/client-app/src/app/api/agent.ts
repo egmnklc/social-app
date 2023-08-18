@@ -3,7 +3,6 @@ import { Activity } from "../models/activity";
 import { toast } from "react-toastify";
 import { router } from "../router/Routes";
 import { store } from "../stores/store";
-import { get } from "http";
 
 //* Add some delay to load content
 const sleep = (delay: number) => {
