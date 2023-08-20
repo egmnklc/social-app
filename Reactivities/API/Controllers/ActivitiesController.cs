@@ -2,10 +2,12 @@ using Application;
 using Application.Core;
 using Domain;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [AllowAnonymous]
     public class ActivitiesController : BaseApiController
     {
         private readonly IMediator _mediator;
@@ -22,6 +24,7 @@ namespace API.Controllers
             // We used Send because we need to Send this query to our Mediator Handler
             return HandleResult(await Mediator.Send(new List.Query()));
         }
+
 
         // When we make this request, it's going to go to the api/activities/id and use the id here.
         [HttpGet("{id}")]

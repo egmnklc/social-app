@@ -14,7 +14,7 @@ import ActivityFilters from "./ActivityFilters";
 
 export default observer(function ActivityDashboard() {
   const { activityStore } = useStore();
-  const {loadActivities, activityRegistry} = activityStore;
+  const { loadActivities, activityRegistry } = activityStore;
 
   /*
    *  The [] (this is an empty dependency array) passed here will make useEffect to fire only once.
@@ -28,7 +28,7 @@ export default observer(function ActivityDashboard() {
   }, [loadActivities, activityRegistry]);
 
   if (activityStore.loadingInitial)
-    return <LoadingComponent content="Loading App" />;
+    return <LoadingComponent content="Loading activities..." />;
 
   return (
     <Grid>
@@ -36,7 +36,7 @@ export default observer(function ActivityDashboard() {
         <ActivityList />
       </Grid.Column>
       <Grid.Column width="6">
-        <ActivityFilters/>
+        <ActivityFilters />
       </Grid.Column>
     </Grid>
   );

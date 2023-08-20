@@ -1,17 +1,20 @@
 import { createContext, useContext } from "react";
 import ActivityStore from "./activityStore";
 import CommonStore from "./commonStore";
+import UserStore from "./userStore";
 
 //* activityStore is a class but classes can be also used as types.
 interface Store {
   activityStore: ActivityStore;
   commonStore: CommonStore;
+  userStore: UserStore;
 }
 
 //* Store errors coming back from API inside CommonStore()
 export const store: Store = {
   activityStore: new ActivityStore(),
-  commonStore: new CommonStore()
+  commonStore: new CommonStore(),
+  userStore: new UserStore()
 };
 
 /*

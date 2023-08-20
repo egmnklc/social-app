@@ -845,4 +845,9 @@ dotnet watch --no-hot-reload
 > Users will be a new entity. About the use cases, logging in and registering are our use cases. Authentication is part of the API project, not the Application. The Application layer will have no knowledge of the identity. It will have the knowledge of the entity that we are adding for the user but it will not know if the user is being authenticated or not. It's job is to process the Business Logic to retrieve activities and pass them out or updates or deletes etc.
 >
 > Identity will be a seperate system integrated into our Application. Application layer will be able to get the user's username, but not have any knowledge of our identity system.
+
+## DTO's
+> A Data Tansfer Object (DTO) is a data transfer object used to carry data between processes.
+
+> If something you're creating doesn't involve data access, then it is not a Repository.
 ---

@@ -1,7 +1,9 @@
 using API.Extensions;
 using API.Middleware;
 using Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -12,7 +14,11 @@ var builder = WebApplication.CreateBuilder(args);
 * We can add services to guve us more functionality to our logic that we create.
 */
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(opt => {
+    //* Every single endpoint is going to require authentication now
+    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+    opt.Filters.Add(new AuthorizeFilter(policy));
+});
 //* Add all services from the ApplicationServiceExtensions file to keep Program file clean.
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
@@ -42,6 +48,10 @@ if (app.Environment.IsDevelopment())
 // Addig CORS before getting to Authorization, 
 app.UseCors("CorsPolicy");
 
+//* Their order matter. 
+//* Is this a valid user?
+app.UseAuthentication();
+//* Is the user allowed to be here?
 app.UseAuthorization();
 
 //* This is referring to our API controllers, which is the Controllers folder.
