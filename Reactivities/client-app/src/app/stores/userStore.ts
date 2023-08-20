@@ -26,6 +26,7 @@ export default class UserStore {
       });
       console.log(user.token, user.username)
       router.navigate("/activities");
+      store.modalStore.closeModal();
     } catch (err) {
       throw err;
     }
