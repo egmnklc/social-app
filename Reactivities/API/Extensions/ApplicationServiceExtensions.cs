@@ -1,7 +1,9 @@
 using Application;
 using Application.Core;
+using Application.Interfaces;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Infrastructure.Security;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -67,6 +69,8 @@ namespace API.Extensions
             //  When the app starts, this service will be registers and any validators will be registered inside there
             // as well, so it's going to automatically validate for us.
             services.AddValidatorsFromAssemblyContaining<Create>();
+            services.AddHttpContextAccessor();
+            services.AddScoped<IUserAccessor, UserAccessor>();
 
 
             return services;

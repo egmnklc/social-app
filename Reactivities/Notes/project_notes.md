@@ -851,3 +851,7 @@ dotnet watch --no-hot-reload
 
 > If something you're creating doesn't involve data access, then it is not a Repository.
 ---
+
+> ![Alt text](image-18.png)
+> ![Alt text](image-19.png)
+> ![Alt text](image-20.png)

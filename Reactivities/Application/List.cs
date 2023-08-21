@@ -1,8 +1,9 @@
 using Application.Core;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Persistence;
 
 namespace Application
@@ -11,21 +12,21 @@ namespace Application
     public class List
     {
         // Query class will derieve from IRequest, which will return a List of Activities.
-        public class Query : IRequest<Result<List<Activity>>> { }
-        public class Handler : IRequestHandler<Query, Result<List<Activity>>>
+        public class Query : IRequest<Result<List<ActivityDto>>> { }
+        public class Handler : IRequestHandler<Query, Result<List<ActivityDto>>>
         {
             // This creates a Handle method that returns Task List of Acitivities.
             // - Since we're returning a Task, we need to make it async.
             private readonly DataContext _context;
-            private readonly ILogger<List> _logger;
+            private readonly IMapper _mapper;
 
-            public Handler(DataContext context, ILogger<List> logger)
+            public Handler(DataContext context, IMapper mapper)
             {
-                _logger = logger;
+                _mapper = mapper;
                 _context = context;
             }
 
-            public async Task<Result<List<Activity>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<ActivityDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 // // We'll add some slowness to our request
                 // try
@@ -44,8 +45,12 @@ namespace Application
                 //     _logger.LogInformation($"Task was cancelled");
                 // }
 
+                //* We're projecting to an ActivityDto so type of activities is now an ActivityDto
+                var activities = await _context.Activities.ProjectTo<ActivityDto>(_mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken);
+
                 //* If request makes through, return requested activities as normal. 
-                return Result<List<Activity>>.Success(await _context.Activities.ToListAsync(cancellationToken));
+                return Result<List<ActivityDto>>.Success(activities);
 
                 //!  NOTE: We need to pass the CancellationToken to Handler in Activities controller and pass it as
                 //! a parameter in HttpGet as CancellactionToken ct and add into return.

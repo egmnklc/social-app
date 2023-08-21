@@ -1,7 +1,10 @@
 using Application.Core;
+using Application.Interfaces;
 using Domain;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application
@@ -26,8 +29,10 @@ namespace Application
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
-            public Handler(DataContext context)
+            private readonly IUserAccessor _userAccessor;
+            public Handler(DataContext context, IUserAccessor userAccessor)
             {
+                _userAccessor = userAccessor;
                 _context = context;
 
             }
@@ -43,6 +48,18 @@ namespace Application
             */
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
+                //* Get the username
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername());
+                
+                //* Create activity attendee, set isHost to true since this is a creation method
+                var attendee = new ActivityAttendee{
+                    AppUser = user,
+                    Activity = request.Activity,
+                    IsHost = true
+                };
+                //* Add activity attendee 
+                request.Activity.Attendees.Add(attendee);
+
                 //*  We're not accessing the database at this point. We only add the Activity in memory,
                 //* not touching the database.
                 _context.Activities.Add(request.Activity);
