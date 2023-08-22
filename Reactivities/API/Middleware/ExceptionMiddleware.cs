@@ -34,7 +34,7 @@ namespace API.Middleware
 
                 var response = _env.IsDevelopment() ? new AppException(context.Response.StatusCode, ex.Message, ex.StackTrace?.ToString())
                 : new AppException(context.Response.StatusCode, "Internal Server Error");
-                //*  Again this is something that our API controllers enabled by defauly because that's how we format JSON when we return it
+                //*  Again this is something that our API controllers enabled by default because that's how we format JSON when we return it
                 //* but outside of an API Controller we need to specify this information as well.
                 var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
