@@ -1,8 +1,10 @@
 using Application;
 using Application.Core;
 using Application.Interfaces;
+using Application.Photos;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Infrastructure.Photos;
 using Infrastructure.Security;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -71,7 +73,10 @@ namespace API.Extensions
             services.AddValidatorsFromAssemblyContaining<Create>();
             services.AddHttpContextAccessor();
             services.AddScoped<IUserAccessor, UserAccessor>();
-
+            services.AddScoped<IPhotoAccessor, PhotoAccessor>();
+            // Get necessary values from appSettings.json for Cloudinary
+            services.Configure<CloudinarySettings>(config.GetSection("Cloudinary"));
+            
 
             return services;
 

@@ -855,3 +855,21 @@ dotnet watch --no-hot-reload
 > ![Alt text](image-18.png)
 > ![Alt text](image-19.png)
 > ![Alt text](image-20.png)
+---
+# Image storage
+> Will be using the Cloudinary API for image storage in the cloud
+
+## Photo Storage Options
+> ![Alt text](image-21.png)
+> ![Alt text](image-22.png)
+> ![Alt text](image-23.png)
+
+## Architecture
+> ![Alt text](image-25.png)
+
+
+## Relationships
+> ![Alt text](image-24.png)
+
+> Learned the difference between Lazy Loading & Eager Loading.
+---

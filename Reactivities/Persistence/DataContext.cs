@@ -14,6 +14,9 @@ namespace Persistence
         //* This is going to represent the tablename we create it in the db.
         public DbSet<Activity> Activities { get; set; }
         public DbSet<ActivityAttendee> ActivityAttendees { get; set; }
+        //* Create photos table
+        public DbSet<Photo> Photos {get; set; } 
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
