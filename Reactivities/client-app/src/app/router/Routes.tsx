@@ -8,6 +8,7 @@ import TestErrors from "../../features/errors/TestError";
 import NotFound from "../../features/errors/NotFound";
 import ServerError from "../../features/errors/ServerError";
 import LoginForm from "../../features/users/LoginForm";
+import ProfilePage from "../../features/profile/ProfilePage";
 
 /*
  * The App component is the top of a tree and will have child routes we can navigate to.
@@ -35,6 +36,10 @@ export const routes: RouteObject[] = [
         element: <ActivityForm key="manage" />,
       },
       {
+        path: "profiles/:username",
+        element: <ProfilePage />,
+      },
+      {
         path: "login",
         element: <LoginForm />,
       },
@@ -48,7 +53,7 @@ export const routes: RouteObject[] = [
       },
       {
         path: "server-error",
-        element: <ServerError/>,
+        element: <ServerError />,
       },
       {
         path: "*",

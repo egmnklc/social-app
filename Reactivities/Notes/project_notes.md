@@ -872,4 +872,9 @@ dotnet watch --no-hot-reload
 > ![Alt text](image-24.png)
 
 > Learned the difference between Lazy Loading & Eager Loading.
+
+> Set up one to many relation between user and photos.
+> - Learned about photo storage options,
+> - Adding a photo upload service - backend,
+> - Using the CloudinaryAPI
 ---
