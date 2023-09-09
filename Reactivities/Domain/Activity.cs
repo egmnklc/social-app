@@ -12,6 +12,7 @@ namespace Domain
         public bool isCancelled { get; set; }
         //* 'new' will make sure that we don't get a null reference when we try and add somethig to this collection
         public ICollection<ActivityAttendee> Attendees{ get; set; }  = new List<ActivityAttendee>();
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
         
     }
 }
