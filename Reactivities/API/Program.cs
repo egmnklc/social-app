@@ -1,5 +1,6 @@
 using API.Extensions;
 using API.Middleware;
+using API.SignalR;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -56,6 +57,9 @@ app.UseAuthorization();
 
 //* This is referring to our API controllers, which is the Controllers folder.
 app.MapControllers();
+//* Users will be routed to our chat section when they connect to our chat hub.
+//*     /chat is the endpoint for our SignalR hub.
+app.MapHub<ChatHub>("/chat");
 
 /*
 *

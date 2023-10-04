@@ -31,7 +31,26 @@ namespace API.Extensions
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
+                opt.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context => 
+                    {
+                        /*
+                          Spelling here is important because SignalR, the client side, is going to
+                        pass our token in a query string, and the query string going to be spelt
+                        exactly as the same as this access_token.
+                        */
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/chat"))
+                        {
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
             });
+            
             services.AddAuthorization(opt => {
                 opt.AddPolicy("IsActivityHost", policy =>{
                     policy.Requirements.Add(new IsHostRequirement());

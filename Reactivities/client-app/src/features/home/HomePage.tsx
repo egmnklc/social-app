@@ -4,9 +4,13 @@ import { useStore } from "../../app/stores/store";
 import { observer } from "mobx-react-lite";
 import LoginForm from "../users/LoginForm";
 import RegisterForm from "../users/RegisterForm";
+import LoadingComponent from "../../app/layout/LoadingComponent";
 
 export default observer(function HomePage() {
-  const { userStore, modalStore } = useStore();
+  const { userStore, modalStore, activityStore } = useStore();
+
+  if (activityStore.loadingInitial)
+    return <LoadingComponent content="Loading activities..." />;
 
   return (
     <Segment inverted textAlign="center" vertical className="masthead">

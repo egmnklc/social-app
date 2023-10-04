@@ -4,6 +4,7 @@ import CommonStore from "./commonStore";
 import UserStore from "./userStore";
 import ModalStore from "./modelStore";
 import ProfileStore from "./profileStore";
+import CommentStore from "./commentStore";
 
 //* activityStore is a class but classes can be also used as types.
 interface Store {
@@ -12,6 +13,7 @@ interface Store {
   userStore: UserStore;
   modalStore: ModalStore;
   profileStore: ProfileStore;
+  commentStore: CommentStore;
 }
 
 //* Store errors coming back from API inside CommonStore()
@@ -20,7 +22,8 @@ export const store: Store = {
   commonStore: new CommonStore(),
   userStore: new UserStore(),
   modalStore: new ModalStore(),
-  profileStore: new ProfileStore()
+  profileStore: new ProfileStore(),
+  commentStore: new CommentStore()
 };
 
 /*

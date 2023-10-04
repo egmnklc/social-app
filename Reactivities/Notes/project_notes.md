@@ -867,7 +867,6 @@ dotnet watch --no-hot-reload
 ## Architecture
 > ![Alt text](image-25.png)
 
-
 ## Relationships
 > ![Alt text](image-24.png)
 
@@ -877,4 +876,6 @@ dotnet watch --no-hot-reload
 > - Learned about photo storage options,
 > - Adding a photo upload service - backend,
 > - Using the CloudinaryAPI
+
+## SignalR
 ---
