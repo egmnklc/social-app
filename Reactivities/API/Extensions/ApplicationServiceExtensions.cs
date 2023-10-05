@@ -40,7 +40,8 @@ namespace API.Extensions
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()
-                    .WithOrigins("http://localhost:3000");
+                    .WithOrigins("http://localhost:3000", "http://172.28.16.1:3000"); // Added the new origin here
+
                 }
                 );
             });
