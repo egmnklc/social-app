@@ -17,6 +17,8 @@ namespace Persistence
         public DbSet<Comment> Comments { get; set; }    
         //* Create photos table
         public DbSet<Photo> Photos {get; set; } 
+        //* We've recently added this, and will configure this in the OnModelCreating method.
+        public DbSet<UserFollowing> UserFollowings {get; set;}
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -42,6 +44,10 @@ namespace Persistence
             .OnDelete(DeleteBehavior.Cascade);
             //  Cascade delete behavior will delete related entities' too. For example if a user is deleted,
             // then the comments of that user will be also deleted.
+
+            builder.Entity<UserFollowing>(b => {
+                
+            });
         }
     }
 }

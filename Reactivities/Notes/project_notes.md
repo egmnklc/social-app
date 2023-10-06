@@ -878,4 +878,8 @@ dotnet watch --no-hot-reload
 > - Using the CloudinaryAPI
 
 ## SignalR
+> Real time communication dotnet framework, used by Microsoft
+
+## Following-Follower Feature
+>![Alt text](image-26.png)
 ---
