@@ -27,11 +27,21 @@ export default class CommentStore{
      
             //* Recieve all comments of the activity that we're connected to.
             this.hubConnection.on("LoadComments", (comments: ChatComment[]) => {
-                runInAction(() => this.comments = comments);
+                runInAction(() => {
+                    comments.forEach(comment =>  {
+                        comment.createdAt = new Date(comment.createdAt + "Z");
+                    })
+                    this.comments = comments
+                });
             });
 
+            //* Here comments are coming from the SignalR hub, and not from the database.
             this.hubConnection.on("ReceiveComment", (comment: ChatComment) => {
-                runInAction(() => this.comments.push(comment));
+                runInAction(() => {
+                    comment.createdAt = new Date(comment.createdAt)
+                    //* Unshift will place the new element at the front of the array.
+                    this.comments.unshift(comment)
+                });
             });
         }
     }

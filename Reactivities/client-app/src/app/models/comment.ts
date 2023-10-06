@@ -2,7 +2,7 @@
 export interface ChatComment{
     id: number;
     //* This was a date but changed it to the string because it caused error in ActivityDetailedChat.tsx
-    createdAt: string;
+    createdAt: Date;
     body: string;
     username: string;
     displayName: string;

@@ -35,7 +35,8 @@ namespace Application.Comments
                 // Return a list of comments as comment dtos
                 var comments = await _context.Comments
                 .Where(x => x.Activity.Id == request.ActivityId)
-                .OrderBy(x => x.CreatedAt)
+                // The newer comment to be displayed at top
+                .OrderByDescending(x => x.CreatedAt)
                 .ProjectTo<CommentDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 

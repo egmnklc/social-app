@@ -36,7 +36,7 @@ namespace Application
                 //         cancellationToken.ThrowIfCancellationRequested();
                 //         // If request continues,
                 //         await Task.Delay(1000, cancellationToken);
-                //         _logger.LogInformation($"Task {i} has completed");
+            //         _logger.LogInformation($"Task {i} has completed");
                 //     }
                 // }
                 // catch (System.Exception)
