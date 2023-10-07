@@ -42,11 +42,24 @@ namespace Persistence
             .HasOne(a => a.Activity)
             .WithMany(c => c.Comments)
             .OnDelete(DeleteBehavior.Cascade);
-            //  Cascade delete behavior will delete related entities' too. For example if a user is deleted,
-            // then the comments of that user will be also deleted.
+            //*  Cascade delete behavior will delete related entities' too. For example if a user is deleted,
+            //* then the comments of that user will be also deleted.
 
             builder.Entity<UserFollowing>(b => {
-                
+                b.HasKey(k => new {k.ObserverId, k.TargetId});
+
+                //* Creating the observer table
+                b.HasOne(o => o.Observer)
+                    .WithMany(f => f.Followings)
+                    .HasForeignKey(o => o.ObserverId)
+                    //* Cascade setting: When an a primary entity is deleted, related entities are also deleted
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                //* Creating the target table
+                b.HasOne(o => o.Target)
+                    .WithMany(f => f.Followers)
+                    .HasForeignKey(o => o.TargetId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }
