@@ -1,7 +1,7 @@
 using Application.Core;
+using Application.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -19,9 +19,11 @@ namespace Application
             // - Since we're returning a Task, we need to make it async.
             private readonly DataContext _context;
             private readonly IMapper _mapper;
+            private readonly IUserAccessor _userAccessor;
 
-            public Handler(DataContext context, IMapper mapper)
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor)
             {
+                _userAccessor = userAccessor;
                 _mapper = mapper;
                 _context = context;
             }
@@ -36,7 +38,7 @@ namespace Application
                 //         cancellationToken.ThrowIfCancellationRequested();
                 //         // If request continues,
                 //         await Task.Delay(1000, cancellationToken);
-            //         _logger.LogInformation($"Task {i} has completed");
+                //         _logger.LogInformation($"Task {i} has completed");
                 //     }
                 // }
                 // catch (System.Exception)
@@ -46,8 +48,10 @@ namespace Application
                 // }
 
                 //* We're projecting to an ActivityDto so type of activities is now an ActivityDto
-                var activities = await _context.Activities.ProjectTo<ActivityDto>(_mapper.ConfigurationProvider)
-                .ToListAsync(cancellationToken);
+                var activities = await _context.Activities
+                    .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider, 
+                        new {currentUsername = _userAccessor.GetUsername()})
+                    .ToListAsync(cancellationToken);
 
                 //* If request makes through, return requested activities as normal. 
                 return Result<List<ActivityDto>>.Success(activities);

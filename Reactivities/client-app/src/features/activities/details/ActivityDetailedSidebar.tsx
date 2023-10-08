@@ -4,11 +4,11 @@ import { observer } from "mobx-react-lite";
 import { Activity } from "../../../app/models/activity";
 
 interface Props {
-    activity: Activity;
+  activity: Activity;
 }
 
 export default observer(function ActivityDetailedSidebar({
-    activity: { attendees, host },
+  activity: { attendees, host },
 }: Props) {
   if (!attendees) return null;
   return (
@@ -27,7 +27,7 @@ export default observer(function ActivityDetailedSidebar({
         <List relaxed divided>
           {attendees.map((attendee) => (
             <Item key={attendee.username} style={{ position: "relative" }}>
-                {/* Put a ribbon on the host of the event */}
+              {/* Put a ribbon on the host of the event */}
               {attendee.username === host?.username && (
                 <Label
                   style={{ position: "absolute" }}
@@ -44,7 +44,9 @@ export default observer(function ActivityDetailedSidebar({
                     {attendee.displayName}
                   </Link>
                 </Item.Header>
-                <Item.Extra style={{ color: "orange" }}>Following</Item.Extra>
+                {attendee.following && (
+                  <Item.Extra style={{ color: "orange" }}>Following</Item.Extra>
+                )}
               </Item.Content>
             </Item>
           ))}
