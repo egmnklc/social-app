@@ -10,23 +10,28 @@ import {
 } from "semantic-ui-react";
 import { Profile } from "../../app/models/profile";
 import { observer } from "mobx-react-lite";
+import FollowButton from "./FollowButton";
 
-interface Props{
-  profile: Profile
+interface Props {
+  profile: Profile;
 }
 
 //*  Profile object is coming from a store. We may not be accessing the store directly but this function needs to be an observer to
 //* use profile object.
-export default observer(function ProfileHeader({profile}: Props) {
+export default observer(function ProfileHeader({ profile }: Props) {
   return (
     <Segment>
       <Grid>
         <Grid.Column width={12}>
           <Item.Group>
             <Item>
-              <Item.Image avatar size="small" src={profile.image || "/assets/user.png"} />
+              <Item.Image
+                avatar
+                size="small"
+                src={profile.image || "/assets/user.png"}
+              />
               <Item.Content verticalAlign="middle">
-                <Header as="h1" content={profile.displayName}/>
+                <Header as="h1" content={profile.displayName} />
               </Item.Content>
             </Item>
           </Item.Group>
@@ -37,22 +42,9 @@ export default observer(function ProfileHeader({profile}: Props) {
             <Statistic label="following" value={profile.followingCount} />
           </Statistic.Group>
           <Divider />
-          <Reveal animated="move">
-            <Reveal.Content visible style={{ width: "100%" }}>
-              <Button fluid color="teal" content="Following" />
-            </Reveal.Content>
-            <Reveal.Content hidden style={{ width: "100%" }}>
-              <Button
-                fluid
-                basic
-                color={true ? "red" : "green"}
-                content={true ? "Unfollow" : "Follow"}
-              />
-            </Reveal.Content>
-          </Reveal>
+          <FollowButton profile={profile} />
         </Grid.Column>
       </Grid>
     </Segment>
   );
-}
-);
+});
