@@ -22,7 +22,7 @@ namespace API.Controllers
         // Explanation of the parameter in the function:
         //  When receiving the query string parameters inside an object, we need to give our API controller
         // a hint about where to look for these parameters.
-        public async Task<IActionResult> GetActivities([FromQuery]PagingParams param)
+        public async Task<IActionResult> GetActivities([FromQuery]ActivityParams param)
         {
             // We used Send because we need to Send this query to our Mediator Handler
             return HandlePagedResult(await Mediator.Send(new List.Query{Params = param}));

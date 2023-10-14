@@ -14,7 +14,7 @@ namespace Application
         // Query class will derieve from IRequest, which will return a List of Activities.
         public class Query : IRequest<Result<PagedList<ActivityDto>>>
         {
-            public PagingParams Params { get; set; }
+            public ActivityParams Params { get; set; }
         }
         public class Handler : IRequestHandler<Query, Result<PagedList<ActivityDto>>>
         {
@@ -52,11 +52,24 @@ namespace Application
 
                 //* We're projecting to an ActivityDto so type of activities is now an ActivityDto
                 var query = _context.Activities
+                //* Only show future activities
+                    .Where(d => d.Date >= request.Params.StartDate)
                 //* Order activities by date
                     .OrderBy(d => d.Date)
                     .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider,
                         new { currentUsername = _userAccessor.GetUsername() })
                     .AsQueryable();
+
+                if (request.Params.IsGoing && !request.Params.IsHost)
+                {
+                    query = query.Where(x => x.Attendees.Any(a => a.Username == _userAccessor.GetUsername()));
+                }
+
+                if (request.Params.IsHost && !request.Params.IsGoing)
+                {
+                    //* We're working with an ActivityDTO so we have direct access to the HostUsername inside here
+                    query = query.Where(x => x.HostUsername == _userAccessor.GetUsername());
+                }
 
                 //* If request makes through, return requested activities as normal. 
                 return Result<PagedList<ActivityDto>>.Success(
