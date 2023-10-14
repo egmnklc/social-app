@@ -5,6 +5,7 @@ import { v4 as uuid } from "uuid";
 import { format } from "date-fns";
 import { store } from "./store";
 import { Profile } from "../models/profile";
+import { Pagination } from "../models/pagination";
 
 export default class ActivityStore {
   // title = "Hello from MobX!";
@@ -17,6 +18,7 @@ export default class ActivityStore {
   //* Are we loading our components for the first time?, same as state for loading: const [loading, setLoading] = useState(true);
   //* Used to distinguish the 'initial loading state' from other loading states(like updating or deleting)
   loadingInitial = false;
+  pagination: Pagination | null = null;
 
   constructor() {
     /*
@@ -54,11 +56,13 @@ export default class ActivityStore {
     this.loadingInitial = true;
     try {
       //* Get activities from the API, loop over each, split date and mutate the state with MobX. It would have been an AntiPattern in Redux.
-      const activities = await agent.Activities.list();
+      const result = await agent.Activities.list();
       runInAction(() => {
-        activities.forEach((activity) => {
+        result.data.forEach((activity) => {
           this.setActivity(activity);
         });
+        //* After we have our activities back inside our result is not just the data but the pagination as well.
+        this.setPagination(result.pagination);
         this.loadingInitial = false;
       });
     } catch (err) {
@@ -68,6 +72,11 @@ export default class ActivityStore {
       });
     }
   };
+
+  //* Helper function to set the pagination when we load our activities.
+  setPagination = (pagination: Pagination) => {
+    this.pagination = pagination;
+  }
 
   private setActivity = (activity: Activity) => {
     const user = store.userStore.user;
