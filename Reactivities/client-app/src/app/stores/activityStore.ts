@@ -5,7 +5,7 @@ import { v4 as uuid } from "uuid";
 import { format } from "date-fns";
 import { store } from "./store";
 import { Profile } from "../models/profile";
-import { Pagination } from "../models/pagination";
+import { Pagination, PagingParams } from "../models/pagination";
 
 export default class ActivityStore {
   // title = "Hello from MobX!";
@@ -19,6 +19,7 @@ export default class ActivityStore {
   //* Used to distinguish the 'initial loading state' from other loading states(like updating or deleting)
   loadingInitial = false;
   pagination: Pagination | null = null;
+  pagingParams = new PagingParams();
 
   constructor() {
     /*
@@ -30,6 +31,17 @@ export default class ActivityStore {
      *
      */
     makeAutoObservable(this);
+  }
+
+  setPagingParams = (pagingParams: PagingParams) => {
+    this.pagingParams = pagingParams;
+  };
+
+  get axiosParams(){
+    const params = new URLSearchParams();
+    params.append('pageNumber', this.pagingParams.pageNumber.toString());
+    params.append('pageSize', this.pagingParams.pageSize.toString());
+    return params;
   }
 
   //* This is a computed property
@@ -52,11 +64,11 @@ export default class ActivityStore {
     );
   }
 
-  loadActivities = async () => {
+  loadActivities = async (  ) => {
     this.loadingInitial = true;
     try {
       //* Get activities from the API, loop over each, split date and mutate the state with MobX. It would have been an AntiPattern in Redux.
-      const result = await agent.Activities.list();
+      const result = await agent.Activities.list(this.axiosParams);
       runInAction(() => {
         result.data.forEach((activity) => {
           this.setActivity(activity);
@@ -76,7 +88,7 @@ export default class ActivityStore {
   //* Helper function to set the pagination when we load our activities.
   setPagination = (pagination: Pagination) => {
     this.pagination = pagination;
-  }
+  };
 
   private setActivity = (activity: Activity) => {
     const user = store.userStore.user;
@@ -222,37 +234,41 @@ export default class ActivityStore {
     }
   };
 
-
   cancelActivityToggle = async () => {
     this.loading = true;
     try {
       await agent.Activities.attend(this.selectedActivity!.id);
-      runInAction(()=> {
-        this.selectedActivity!.isCancelled = !this.selectedActivity?.isCancelled;
-        this.activityRegistry.set(this.selectedActivity!.id, this.selectedActivity!)
-      })       
+      runInAction(() => {
+        this.selectedActivity!.isCancelled =
+          !this.selectedActivity?.isCancelled;
+        this.activityRegistry.set(
+          this.selectedActivity!.id,
+          this.selectedActivity!
+        );
+      });
     } catch (err) {
-      console.log(err)
+      console.log(err);
     } finally {
       runInAction(() => {
         this.loading = false;
-      })
+      });
     }
-  }
+  };
 
   clearSelectedActivity = () => {
     this.selectedActivity = undefined;
-  }
+  };
 
   updateAttendeeFollowing = (username: string) => {
-    this.activityRegistry.forEach( activity => {
-      activity.attendees.forEach(attendee => {
-        if (attendee.username === username)
-        {
-          attendee.following ? attendee.followersCount-- : attendee.followersCount++;
+    this.activityRegistry.forEach((activity) => {
+      activity.attendees.forEach((attendee) => {
+        if (attendee.username === username) {
+          attendee.following
+            ? attendee.followersCount--
+            : attendee.followersCount++;
           attendee.following = !attendee.following;
         }
-      })
-    })
-  }
+      });
+    });
+  };
 }
