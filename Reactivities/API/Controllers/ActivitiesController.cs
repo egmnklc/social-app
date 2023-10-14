@@ -25,7 +25,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetActivities([FromQuery]PagingParams param)
         {
             // We used Send because we need to Send this query to our Mediator Handler
-            return HandleResult(await Mediator.Send(new List.Query{Params = param}));
+            return HandlePagedResult(await Mediator.Send(new List.Query{Params = param}));
         }
 
 

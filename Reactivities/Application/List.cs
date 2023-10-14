@@ -52,6 +52,8 @@ namespace Application
 
                 //* We're projecting to an ActivityDto so type of activities is now an ActivityDto
                 var query = _context.Activities
+                //* Order activities by date
+                    .OrderBy(d => d.Date)
                     .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider,
                         new { currentUsername = _userAccessor.GetUsername() })
                     .AsQueryable();
