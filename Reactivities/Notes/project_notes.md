@@ -903,5 +903,8 @@ dotnet watch --no-hot-reload
 > Take activities variable as an example here, the query only goes to the database when we execute **`ToListAsync()`**. Then it returns the results. 
 > : So the overall idea of this is to simply defer execution of our queries.
 > 
+> **`We are doing this to save bandwith. There is no necessary particular reason to load all activities at once within a infinite scrool page manner. Hence. we will optimize bandwith usage and provide a better user experience with paging, sorting and filtering. All this changes will take effect on the Application layer.`**
+
 
 ---
+
