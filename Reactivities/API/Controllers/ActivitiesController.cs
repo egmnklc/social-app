@@ -19,10 +19,13 @@ namespace API.Controllers
 
         // Returns a list of activities
         [HttpGet] // api/acitivites
-        public async Task<IActionResult> GetActivities()
+        // Explanation of the parameter in the function:
+        //  When receiving the query string parameters inside an object, we need to give our API controller
+        // a hint about where to look for these parameters.
+        public async Task<IActionResult> GetActivities([FromQuery]PagingParams param)
         {
             // We used Send because we need to Send this query to our Mediator Handler
-            return HandleResult(await Mediator.Send(new List.Query()));
+            return HandleResult(await Mediator.Send(new List.Query{Params = param}));
         }
 
 

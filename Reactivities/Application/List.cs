@@ -12,8 +12,11 @@ namespace Application
     public class List
     {
         // Query class will derieve from IRequest, which will return a List of Activities.
-        public class Query : IRequest<Result<List<ActivityDto>>> { }
-        public class Handler : IRequestHandler<Query, Result<List<ActivityDto>>>
+        public class Query : IRequest<Result<PagedList<ActivityDto>>>
+        {
+            public PagingParams Params { get; set; }
+        }
+        public class Handler : IRequestHandler<Query, Result<PagedList<ActivityDto>>>
         {
             // This creates a Handle method that returns Task List of Acitivities.
             // - Since we're returning a Task, we need to make it async.
@@ -28,7 +31,7 @@ namespace Application
                 _context = context;
             }
 
-            public async Task<Result<List<ActivityDto>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<PagedList<ActivityDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 // // We'll add some slowness to our request
                 // try
@@ -48,13 +51,15 @@ namespace Application
                 // }
 
                 //* We're projecting to an ActivityDto so type of activities is now an ActivityDto
-                var activities = await _context.Activities
-                    .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider, 
-                        new {currentUsername = _userAccessor.GetUsername()})
-                    .ToListAsync(cancellationToken);
+                var query = _context.Activities
+                    .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider,
+                        new { currentUsername = _userAccessor.GetUsername() })
+                    .AsQueryable();
 
                 //* If request makes through, return requested activities as normal. 
-                return Result<List<ActivityDto>>.Success(activities);
+                return Result<PagedList<ActivityDto>>.Success(
+                    await PagedList<ActivityDto>.CreateAsync(query, request.Params.PageNumber, request.Params.PageSize)
+                );
 
                 //!  NOTE: We need to pass the CancellationToken to Handler in Activities controller and pass it as
                 //! a parameter in HttpGet as CancellactionToken ct and add into return.
