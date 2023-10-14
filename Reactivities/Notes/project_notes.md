@@ -883,3 +883,25 @@ dotnet watch --no-hot-reload
 ## Following-Follower Feature
 >![Alt text](image-26.png)
 ---
+---
+# Paging, Sorting and Filtering
+## IQueryable\<T>
+> Paging, sorting and filtering methods will take place on the API & Client. IQueryable\<T> will be the place we store our queries until we are ready to execute them. It contains a query variable that stores query commands. Query commands can be like  OrderBy, Where, etc. 
+>
+> Before we execute our SQL query, we're going to build up an expression tree using the IQueryable\<T>
+> - IQueryable\<T> creates an Expression tree.
+> - The execution is deferred until iteration:
+>   - If we execute a ForEach loop inside the list, then ithas to execute the Queryable.
+>   - If we put the list out to a list or an array or a dictionary,  again that then executes whatever is inside our Queryable
+>  - Also singleton queries will cause the query to be executed against our database.
+>     - If we want to get a count of the activities or the average things like that will also execute our query.
+>
+> The goal of this and the pagination, sorting and filtering is to defer execution. We don't want to make a query to our database until we have built up the full expression tree that we want to send, and then it goes to our database as a single query.
+
+### Example
+> ![Alt text](image-27.png)
+> Take activities variable as an example here, the query only goes to the database when we execute **`ToListAsync()`**. Then it returns the results. 
+> : So the overall idea of this is to simply defer execution of our queries.
+> 
+
+---
