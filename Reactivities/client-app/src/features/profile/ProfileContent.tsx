@@ -4,19 +4,20 @@ import { observer } from "mobx-react-lite";
 import { Profile } from "../../app/models/profile";
 import ProfileFollowings from "./ProfileFollowings";
 import { useStore } from "../../app/stores/store";
+import ProfileActivities from "./ProfileActivities";
+import ProfileAbout from "./ProfileAbout";
 
 interface Props {
   profile: Profile;
 }
 
 export default observer(function ProfileContent({ profile }: Props) {
-
-  const {profileStore} = useStore();
+  const { profileStore } = useStore();
 
   const panes = [
-    { menuItem: "About", render: () => <Tab.Pane>About Content</Tab.Pane> },
+    { menuItem: "About", render: () => <ProfileAbout /> },
     { menuItem: "Photos", render: () => <ProfilePhotos profile={profile} /> },
-    { menuItem: "Events", render: () => <Tab.Pane>Events Content</Tab.Pane> },
+    { menuItem: "Events", render: () => <ProfileActivities /> },
     {
       menuItem: "Followers",
       render: () => <ProfileFollowings />,
@@ -33,7 +34,9 @@ export default observer(function ProfileContent({ profile }: Props) {
       menuPosition="right"
       panes={panes}
       // We won't use the event to we replaced e with _ to kepe Typescript and linter happy.
-      onTabChange={(_, data) => profileStore.setActiveTab(data.activeIndex as number)}
+      onTabChange={(_, data) =>
+        profileStore.setActiveTab(data.activeIndex as number)
+      }
     />
   );
 });

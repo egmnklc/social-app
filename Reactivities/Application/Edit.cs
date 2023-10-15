@@ -44,7 +44,7 @@ namespace Application
                     * 
                     */
                     //! null return handled inside BaseApiController as NotFound
-                    if (activity == null)  return null;
+                    if (activity == null) return null;
                     //? ?? operator is known as the null coalescing operator. 
                     // Take LHS properties and reflect them to the RHS (it is in the database)
                     _mapper.Map(request.Activity, activity);

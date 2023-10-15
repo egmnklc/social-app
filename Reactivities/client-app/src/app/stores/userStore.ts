@@ -24,7 +24,7 @@ export default class UserStore {
       runInAction(() => {
         this.user = user;
       });
-      console.log(user.token, user.username)
+      console.log(user.token, user.username);
       router.navigate("/activities");
       store.modalStore.closeModal();
     } catch (err) {
@@ -39,14 +39,13 @@ export default class UserStore {
       runInAction(() => {
         this.user = user;
       });
-      console.log(user.token, user.username)
+      console.log(user.token, user.username);
       router.navigate("/activities");
       store.modalStore.closeModal();
     } catch (err) {
       throw err;
     }
   };
-
 
   logout = () => {
     store.commonStore.setToken(null);
@@ -70,7 +69,13 @@ export default class UserStore {
 
   setImage = (image: string) => {
     if (this.user) this.user.image = image;
-  }
+  };
 
+  setUserPhoto = (url: string) => {
+    if (this.user) this.user.image = url;
+  };
 
+  setDisplayName = (name: string) => {
+    if (this.user) this.user.displayName = name;
+  };
 }
