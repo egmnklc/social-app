@@ -11,7 +11,7 @@ export default observer(function ActivityFilters() {
   return (
     <>
       <Menu vertical size="large" style={{ width: "100%", marginTop: 25 }}>
-        <Header icon="filter" attached color="teal" content="filters" />
+        <Header icon="filter" attached color="teal" content="Filters" />
         <Menu.Item
           content="All Activities"
           active={predicate.has("all")}
@@ -27,6 +27,12 @@ export default observer(function ActivityFilters() {
           active={predicate.has("isHost")}
           onClick={() => setPredicate("isHost", "true")}
         />
+        <Menu.Item
+          content="I'm following"
+          active={predicate.has("isFollowing")}
+          onClick={() => setPredicate("isFollowing", "true")}
+        />
+        
       </Menu>
       <Header />
       <Calendar
